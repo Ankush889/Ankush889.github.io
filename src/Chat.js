@@ -339,9 +339,9 @@ const shareSession = async (session) => {
           {sharedError ? (
             <div className="empty-state" style={{ color: 'red' }}>{sharedError}</div>
           ) : !currentSession ? (
-            <div className="empty-state">Select a chat or start a new one</div>
+            <div className="empty-state">{sharedToken ? 'Loading shared chat...' : 'Select a chat or start a new one'}</div>
           ) : messages.length === 0 ? (
-            <div className="empty-state">Start the conversation — ask me anything.</div>
+            <div className="empty-state">{sharedToken ? 'This shared chat has no messages.' : 'Start the conversation — ask me anything.'}</div>
           ) : null}
 
           {messages.map((msg, i) => (
