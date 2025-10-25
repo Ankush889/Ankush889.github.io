@@ -1,70 +1,146 @@
-# Getting Started with Create React App
+# AI Chatbot
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack AI chatbot application with user authentication, chat sessions, and share functionality.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- 🔐 User authentication (Login/Signup)
+- 💬 Multiple chat sessions
+- 🤖 AI-powered responses using Google Gemini API
+- 🔗 Share chat sessions with others
+- 📱 Responsive design
+- 💾 MongoDB for data persistence
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+**Frontend:**
+- React
+- React Router
+- CSS
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+**Backend:**
+- Node.js
+- Express
+- MongoDB (Mongoose)
+- JWT Authentication
+- Google Gemini AI API
 
-### `npm test`
+## Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js (v14 or higher)
+- MongoDB Atlas account
+- Google Gemini API key
 
-### `npm run build`
+## Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. Clone the repository:
+```bash
+git clone https://github.com/YOUR_USERNAME/ai-chatbot.git
+cd ai-chatbot
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. Install dependencies:
+```bash
+npm install
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. Install server dependencies:
+```bash
+cd server
+npm install
+cd ..
+```
 
-### `npm run eject`
+4. Create a `.env` file in the `server/` folder:
+```bash
+MONGODB_URI=your_mongodb_connection_string
+GEMINI_API_KEY=your_gemini_api_key
+JWT_SECRET=your_secret_key
+PORT=5000
+APP_URL=http://localhost:3000
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Running the Application
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Development Mode (Both servers together):
+```bash
+npm run dev
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Or run separately:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+**Terminal 1 - Backend:**
+```bash
+npm run server
+```
 
-## Learn More
+**Terminal 2 - Frontend:**
+```bash
+npm start
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The frontend will run on `http://localhost:3000` and backend on `http://localhost:5000`.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Usage
 
-### Code Splitting
+1. Sign up for a new account or login
+2. Start a new chat session
+3. Type your message and get AI responses
+4. Share chat sessions with others using the share button
+5. Manage multiple chat sessions from the sidebar
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Environment Variables
 
-### Analyzing the Bundle Size
+Create a `server/.env` file with:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+| Variable | Description |
+|----------|-------------|
+| `MONGODB_URI` | MongoDB connection string |
+| `GEMINI_API_KEY` | Google Gemini API key |
+| `JWT_SECRET` | Secret key for JWT tokens |
+| `PORT` | Backend port (default: 5000) |
+| `APP_URL` | Frontend URL for share links |
 
-### Making a Progressive Web App
+## Building for Production
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```bash
+npm run build
+```
 
-### Advanced Configuration
+Then set `NODE_ENV=production` and run:
+```bash
+npm run server
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Project Structure
 
-### Deployment
+```
+ai-chatbot/
+├── public/              # Static files
+├── src/                 # React frontend
+│   ├── App.js
+│   ├── Chat.js
+│   ├── Login.js
+│   └── App.css
+├── server/              # Backend
+│   ├── index.js
+│   ├── models/
+│   │   ├── ChatSession.js
+│   │   └── User.js
+│   └── .env
+├── package.json
+└── README.md
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Contributing
 
-### `npm run build` fails to minify
+Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## License
+
+MIT
+
+## Author
+
+Ankush Kumar V
+Apurva Gupta
