@@ -15,6 +15,7 @@ export default function Chat({ token, username, onLogout, sharedToken }) {
   const [cpError, setCpError] = useState(null);
   const [cpSuccess, setCpSuccess] = useState(null);
   const [menuOpen, setMenuOpen] = useState(null); // Track which session menu is open
+  const [sharedError, setSharedError] = useState(null);
 
   // Ref to scroll to the latest message
   const messagesEndRef = useRef(null);
@@ -43,11 +44,15 @@ export default function Chat({ token, username, onLogout, sharedToken }) {
               ts: new Date(msg.timestamp).getTime()
             }));
             setMessages(formattedMessages);
+            setSharedError(null);
           } else {
-            console.error('Failed to load shared session', response.status);
+            const errorText = await response.text();
+            console.error('Failed to load shared session', response.status, errorText);
+            setSharedError(`Failed to load shared chat: ${response.status} ${response.statusText}`);
           }
         } catch (error) {
           console.error('Error loading shared session:', error);
+          setSharedError('Error loading shared chat. Please check the link and try again.');
         }
       };
       loadSharedSession();
@@ -331,7 +336,9 @@ const shareSession = async (session) => {
       )}
       <div className="chat-main">
         <div className="messages-area" aria-live="polite">
-          {!currentSession ? (
+          {sharedError ? (
+            <div className="empty-state" style={{ color: 'red' }}>{sharedError}</div>
+          ) : !currentSession ? (
             <div className="empty-state">Select a chat or start a new one</div>
           ) : messages.length === 0 ? (
             <div className="empty-state">Start the conversation — ask me anything.</div>
