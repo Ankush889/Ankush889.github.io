@@ -34,7 +34,7 @@ export default function Chat({ token, username, onLogout, sharedToken }) {
       // Load shared session
       const loadSharedSession = async () => {
         try {
-          const response = await fetch(`/api/chat/${sharedToken}`)
+          const response = await fetch(`/api/chat/share/${sharedToken}`)
 
           if (response.ok) {
             const session = await response.json();
