@@ -25,7 +25,9 @@ const connectWithRetry = async () => {
         await mongoose.connect(mongoURI, {
             retryWrites: true,
             w: 'majority',
-            dbName: 'chatbot'
+            dbName: 'chatbot',
+            serverSelectionTimeoutMS: 5000,
+            socketTimeoutMS: 45000
         });
         console.log('Successfully connected to MongoDB Atlas');
     } catch (err) {
@@ -73,13 +75,13 @@ console.log('Environment variables loaded:', {
 
 // Add CORS middleware
 const cors = require('cors');
-const allowedOrigins = process.env.NODE_ENV === 'production' 
-  ? [process.env.APP_URL] 
-  : ['http://localhost:3000', 'http://localhost:5000'];
+const allowedOrigins = process.env.NODE_ENV === 'production'
+    ? [process.env.APP_URL]
+    : ['http://localhost:3000', 'http://localhost:5000'];
 
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true
+    origin: allowedOrigins,
+    credentials: true
 }));
 
 app.use(express.json());
@@ -229,11 +231,11 @@ app.post('/api/chat/sessions/:sessionId/share', authMiddleware, async (req, res)
         const shareToken = crypto.randomBytes(16).toString('hex');
 
         await ChatSession.findByIdAndUpdate(req.params.sessionId, { shareToken });
-        
+
         // Use APP_URL from environment or construct from request
         const host = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
         const shareUrl = `${host}/share/${shareToken}`;
-        
+
         res.json({ shareToken, shareUrl });
     } catch (err) {
         console.error('Error generating share token:', err);
@@ -258,12 +260,12 @@ app.get('/api/chat/share/:token', async (req, res) => {
 app.post('/api/chat/sessions/:sessionId/messages', authMiddleware, async (req, res) => {
     const { input } = req.body;
     const { sessionId } = req.params;
-    
+
     console.log('Received message request:', { sessionId, input });
-    
+
     if (!input) return res.status(400).json({ error: 'Missing input' });
     if (!sessionId) return res.status(400).json({ error: 'Missing session ID' });
-    
+
     let session;
     // Verify session exists
     try {
@@ -296,19 +298,19 @@ app.post('/api/chat/sessions/:sessionId/messages', authMiddleware, async (req, r
     try {
         // Use the model name from .env or default to the modern, fast model
         const MODEL_NAME = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
-        
+
         // FIX: Use the stable 'v1beta' API version and the standard generativelanguage domain.
         // The API Key will be passed in the 'x-goog-api-key' header.
         const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent`;
 
         // console.log(`Sending request to Gemini: ${endpoint}`);
-        
+
         const response = await fetch(endpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 // FIX: Pass the API key using the correct header 
-                'x-goog-api-key': apiKey 
+                'x-goog-api-key': apiKey
             },
             body: JSON.stringify({
                 // Correct nested structure for prompt input
@@ -329,7 +331,7 @@ app.post('/api/chat/sessions/:sessionId/messages', authMiddleware, async (req, r
 
         if (!response.ok) {
             const errorBody = await response.text();
-            
+
             // Log full upstream error details
             // console.error(`Gemini API returned ${response.status} from ${endpoint}:`, errorBody);
 
@@ -384,9 +386,9 @@ app.post('/api/chat/sessions/:sessionId/messages', authMiddleware, async (req, r
 
             res.json({ reply });
         } else if (data?.promptFeedback?.blockReason) {
-             // Handle cases where the model blocks the prompt (e.g., safety filter)
+            // Handle cases where the model blocks the prompt (e.g., safety filter)
             reply = `Your prompt was blocked due to: ${data.promptFeedback.blockReason}.`;
-            
+
             // Update chat session with new messages
             await ChatSession.findByIdAndUpdate(
                 sessionId,
@@ -405,9 +407,9 @@ app.post('/api/chat/sessions/:sessionId/messages', authMiddleware, async (req, r
         }
         else {
             console.warn('Unexpected Gemini response structure or no text generated:', data);
-            res.status(502).json({ 
+            res.status(502).json({
                 error: "The model returned a response, but I couldn't find the text or reason for failure.",
-                data: data 
+                data: data
             });
         }
     } catch (err) {
