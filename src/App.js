@@ -5,8 +5,8 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
 
 function SharedChat() {
-  const { token } = useParams();
-  return <Chat sharedToken={token} />;
+  const { token: shareToken } = useParams(); // Rename to avoid conflict
+  return <Chat sharedToken={shareToken} />;
 }
 
 function App() {
@@ -42,9 +42,16 @@ function App() {
         <main>
           <Routes>
             <Route path="/share/:token" element={<SharedChat />} />
-            <Route path="/" element={
-              !token ? <Login onAuth={handleAuth} /> : <Chat token={token} username={username} onLogout={handleLogout} />
-            } />
+            <Route
+              path="/"
+              element={
+                !token ? (
+                  <Login onAuth={handleAuth} />
+                ) : (
+                  <Chat token={token} username={username} onLogout={handleLogout} />
+                )
+              }
+            />
           </Routes>
         </main>
       </div>
