@@ -243,7 +243,7 @@ app.post('/api/chat/sessions/:sessionId/share', authMiddleware, async (req, res)
     }
 });
 
-// Get session by share token (public endpoint)
+// Get session by share token (public endpoint - NO authMiddleware)
 app.get('/api/chat/share/:token', async (req, res) => {
     try {
         const session = await ChatSession.findOne({ shareToken: req.params.token });
@@ -252,6 +252,7 @@ app.get('/api/chat/share/:token', async (req, res) => {
         }
         res.json(session);
     } catch (err) {
+        console.error('Error fetching shared chat:', err);
         res.status(500).json({ error: 'Error fetching shared chat' });
     }
 });
