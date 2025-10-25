@@ -73,8 +73,12 @@ console.log('Environment variables loaded:', {
 
 // Add CORS middleware
 const cors = require('cors');
+const allowedOrigins = process.env.NODE_ENV === 'production' 
+  ? [process.env.APP_URL] 
+  : ['http://localhost:3000', 'http://localhost:5000'];
+
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: allowedOrigins,
   credentials: true
 }));
 
@@ -418,6 +422,6 @@ if (process.env.NODE_ENV === 'production') {
     app.get('*', (req, res) => res.sendFile(path.join(__dirname, '..', 'build', 'index.html')));
 }
 
-app.listen(port, () => {
-    console.log(`Server listening on http://localhost:${port}`);
+app.listen(port, '0.0.0.0', () => {
+    console.log(`Server listening on port ${port}`);
 });
