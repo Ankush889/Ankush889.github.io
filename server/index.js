@@ -233,7 +233,9 @@ app.post('/api/chat/sessions/:sessionId/share', authMiddleware, async (req, res)
         await ChatSession.findByIdAndUpdate(req.params.sessionId, { shareToken });
 
         // Use APP_URL from environment or construct from request
-        const host = process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
+        const host = process.env.APP_URL || (process.env.NODE_ENV === 'production' ? `${req.protocol}://${req.get('host')}` : 'http://localhost:3000');
+        // Remove trailing slash if present
+        host = host.replace(/\/$/, '');
         const shareUrl = `${host}/share/${shareToken}`;
 
         res.json({ shareToken, shareUrl });
