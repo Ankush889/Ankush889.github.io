@@ -304,6 +304,26 @@ body {
   padding-left: 16px;
 }
 
+/* Shared chat header */
+.shared-chat-header {
+  padding: 16px 0;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 16px;
+}
+
+.shared-chat-header h2 {
+  margin: 0 0 4px 0;
+  color: #0f1720;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.shared-chat-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
 /* Auth styles */
 .auth-container {
   width: 600px;

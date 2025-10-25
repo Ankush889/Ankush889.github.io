@@ -335,6 +335,12 @@ const shareSession = async (session) => {
         </div>
       )}
       <div className="chat-main">
+        {sharedToken && currentSession && (
+          <div className="shared-chat-header">
+            <h2>{currentSession.title}</h2>
+            <p>Shared Chat</p>
+          </div>
+        )}
         <div className="messages-area" aria-live="polite">
           {sharedError ? (
             <div className="empty-state" style={{ color: 'red' }}>{sharedError}</div>
