@@ -236,7 +236,7 @@ app.post('/api/chat/sessions/:sessionId/share', authMiddleware, async (req, res)
         let host = process.env.APP_URL || (process.env.NODE_ENV === 'production' ? `${req.protocol}://${req.get('host')}` : 'http://localhost:3000');
         // Remove trailing slash if present
         host = host.replace(/\/$/, '');
-        const shareUrl = `${host}/share/${shareToken}`;
+        const shareUrl = `${host}share/${shareToken}`;
 
         res.json({ shareToken, shareUrl });
     } catch (err) {
